@@ -1,6 +1,14 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-center class="btn btn-success">
+    <b-alert
+      v-model="showErrorAlert"
+      class="position-fixed fixed-top m-auto mt-2 w-25"
+      style="z-index: 2000;"
+      variant="danger"
+    >
+      Todos os campos são obrigatórios
+    </b-alert>
+    <b-button v-b-modal.modal-center class="btn btn-success" @click="clear">
       <i class="bi bi-plus-lg"></i>
       Add Person
     </b-button>
@@ -9,7 +17,7 @@
       id="modal-center"
       ref="create-person-modal"
       centered
-      title="BootstrapVue"
+      title="Create Person"
     >
       <div class="mb-3">
         <label class="form-label">First Name</label>
@@ -73,11 +81,25 @@ export default {
     return {
       showModal: false,
       form: {},
+      showErrorAlert: false
     };
   },
   beforeMount() {},
   methods: {
     createPerson() {
+      if(
+        !this.form.first_name ||
+        !this.form.last_name ||
+        !this.form.adress ||
+        !this.form.gender ||
+        !this.form.birthday
+      ){
+        this.showErrorAlert = true;
+        setTimeout(() => {
+          this.showErrorAlert = false;
+        }, 2000);
+        return;
+      }
       console.log(this.form);
       const newPerson = {
         first_name: this.form.first_name,
@@ -92,6 +114,9 @@ export default {
         this.$refs["create-person-modal"].hide();
       });
     },
+    clearForm(){
+      this.form = {};
+    }
   },
 };
 </script>
