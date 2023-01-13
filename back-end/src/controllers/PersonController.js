@@ -6,10 +6,10 @@ module.exports = {
     const { first_name, last_name, adress_name, gender, birthday } = req.body;
 
     const person = await Person.create({
-      first_name,
-      last_name,
-      adress_name,
-      gender,
+      first_name: first_name.toLowerCase(),
+      last_name: last_name.toLowerCase(),
+      adress_name: adress_name.toLowerCase(),
+      gender: gender.toLowerCase(),
       birthday,
     });
 
@@ -17,21 +17,46 @@ module.exports = {
   },
 
   async index(req, resp) {
+    function capitalized(str) {
+      return str[0].toUpperCase() + str.substr(1);
+    }
     const { search } = req.params;
 
     if (!search) {
       const persons = await Person.findAll();
-      return resp.status(200).json({ persons });
+      return resp.status(200).json({
+        persons: persons.map((person) => {
+          return {
+            id: person.id,
+            first_name: capitalized(person.first_name),
+            last_name: capitalized(person.last_name),
+            adress_name: capitalized(person.adress_name),
+            gender: capitalized(person.gender),
+            birthday: person.birthday,
+          };
+        }),
+      });
     } else {
       const person = await Person.findAll({
         where: {
-          first_name: { [Op.like]: `%${search}%` },
+          first_name: { [Op.like]: `%${search.toLowerCase()}%` },
         },
       });
       if (!person) {
         return resp.status(204).json({ error: "Person not found" });
       }
-      return resp.status(200).json(person);
+      return resp.status(200).json(
+        person.map((person) => {
+          return {
+            id: person.id,
+            first_name: capitalized(person.first_name),
+            last_name: capitalized(person.last_name),
+            adress_name: capitalized(person.adress_name),
+            gender: capitalized(person.gender),
+            birthday: person.birthday,
+          };
+        })
+      );
     }
   },
 
@@ -46,10 +71,10 @@ module.exports = {
     } else {
       const result = await Person.update(
         {
-          first_name,
-          last_name,
-          adress_name,
-          gender,
+          first_name: first_name.toLowerCase(),
+          last_name: last_name.toLowerCase(),
+          adress_name: adress_name.toLowerCase(),
+          gender: gender.toLowerCase(),
           birthday,
         },
         {

@@ -4,15 +4,33 @@ Rodando o projeto...
 
 Acesse o diretório "back-end" e no terminal, execute os comandos:
 
+# Se você já tem o yarn instalado, execute:
+
 yarn install
 yarn sequelize db:create
 yarn sequelize db:migrate
 
 yarn dev
 
+# A outra opção é utlizar o npm:
+
+npm install
+npx sequelize db:create
+npx sequelize db:migrate
+
+npm run dev
+
+
 
 ----- FRONT END -----
 acesse o diretório "front-end" e execute os comandos:
 
+# Se você já tem o yarn instalado, execute:
+
 yarn install
 yarn dev
+
+# A outra opção é utlizar o npm:
+
+npm install
+npm run dev
