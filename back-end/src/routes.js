@@ -3,8 +3,12 @@ const PersonController = require("./controllers/PersonController");
 
 const routes = express.Router();
 
-routes.get("/persons", PersonController.index);
+routes.get("/persons/:id*?", PersonController.index);
 
 routes.post("/persons", PersonController.store);
+
+routes.patch("/persons/:id", PersonController.update);
+
+routes.delete("/persons/:id", PersonController.delete);
 
 module.exports = routes;

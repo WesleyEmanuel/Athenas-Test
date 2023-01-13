@@ -1,2 +1,10 @@
 yarn sequelize db:create
 yarn sequelize db:migrate
+
+yarn dev
+
+
+----- FRONT END -----
+
+yarn install
+yarn dev

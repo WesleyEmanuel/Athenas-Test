@@ -1,14 +1,14 @@
 <template>
   <div>
     <b-alert
-      v-model="showErrorAlert"
-      class="position-fixed fixed-top m-auto mt-2 w-25"
-      style="z-index: 2000;"
-      variant="danger"
+      v-model="showAlert"
+      class="position-fixed fixed-top m-auto mt-2 w-25 text-center"
+      style="z-index: 2000"
+      :variant="alert.alertColor"
     >
-      Todos os campos são obrigatórios
+      {{ alert.alertMessage }}
     </b-alert>
-    <b-button v-b-modal.modal-center class="btn btn-success" @click="clear">
+    <b-button v-b-modal.modal-center class="btn btn-success" @click="clearForm">
       <i class="bi bi-plus-lg"></i>
       Add Person
     </b-button>
@@ -66,8 +66,12 @@
         />
       </div>
       <template #modal-footer>
-        <b-button class="btn btn-success" @click="createPerson">
-          <i class="bi bi-plus-lg"></i>
+        <b-button
+          class="btn btn-success"
+          @click="createPerson"
+          :disabled="loadingCreatingPerson"
+        >
+          <b-spinner small v-if="loadingCreatingPerson"></b-spinner>
           Add Person
         </b-button>
       </template>
@@ -81,23 +85,27 @@ export default {
     return {
       showModal: false,
       form: {},
-      showErrorAlert: false
+      showAlert: false,
+      alert: {
+        alertMessage: "",
+        alertColor: "",
+      },
+      loadingCreatingPerson: false,
     };
   },
   beforeMount() {},
   methods: {
     createPerson() {
-      if(
+      this.loadingCreatingPerson = true;
+      if (
         !this.form.first_name ||
         !this.form.last_name ||
         !this.form.adress ||
         !this.form.gender ||
         !this.form.birthday
-      ){
-        this.showErrorAlert = true;
-        setTimeout(() => {
-          this.showErrorAlert = false;
-        }, 2000);
+      ) {
+        this.alertFeedBack("All fields are mandatory", "danger");
+        this.loadingCreatingPerson = false;
         return;
       }
       console.log(this.form);
@@ -109,14 +117,36 @@ export default {
         birthday: this.form.birthday,
       };
 
-      this.$http.post("/persons", newPerson).then(() => {
-        this.$emit("updatePersonList");
-        this.$refs["create-person-modal"].hide();
-      });
+      this.$http
+        .post("/persons", newPerson)
+        .then((resp) => {
+          if (resp.status == 201) {
+            this.$emit("updatePersonList");
+            this.$refs["create-person-modal"].hide();
+            this.alertFeedBack("Registration done successfully", "success");
+            this.loadingCreatingPerson = false;
+          } else {
+            this.alertFeedBack("Error when registering", "danger");
+            this.loadingCreatingPerson = false;
+          }
+          console.log(resp);
+        })
+        .catch(() => {
+          this.loadingCreatingPerson = false;
+          this.alertFeedBack("Error when registering", "danger");
+        });
     },
-    clearForm(){
+    clearForm() {
       this.form = {};
-    }
+    },
+    alertFeedBack(message, color) {
+      this.showAlert = true;
+      this.alert.alertMessage = message;
+      this.alert.alertColor = color;
+      setTimeout(() => {
+        this.showAlert = false;
+      }, 2000);
+    },
   },
 };
 </script>
