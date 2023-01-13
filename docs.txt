@@ -12,7 +12,7 @@ yarn dev
 
 
 ----- FRONT END -----
-acesse o diretório "back-end" e execute os comandos:
+acesse o diretório "front-end" e execute os comandos:
 
 yarn install
 yarn dev
