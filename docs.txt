@@ -1,3 +1,10 @@
+Rodando o projeto...
+
+É necessário instalar o PostgreSQL em sua máquina e configurá-lo. Após, dentro do diretório "back-end" desta aplicação, acesse "src/config/database.js" e altere de acordo com as configurações do seu banco de dados.
+
+Acesse o diretório "back-end" e no terminal, execute os comandos:
+
+yarn install
 yarn sequelize db:create
 yarn sequelize db:migrate
 
@@ -5,6 +12,7 @@ yarn dev
 
 
 ----- FRONT END -----
+acesse o diretório "back-end" e execute os comandos:
 
 yarn install
 yarn dev
