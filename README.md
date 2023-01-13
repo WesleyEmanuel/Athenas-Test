@@ -37,7 +37,7 @@ A outra opção é utlizar o npm:
 - npx sequelize db:create (criando banco de dados)
 - npx sequelize db:migrate (criando tabela)
 
-npm run dev
+- npm run dev
 
 
 
