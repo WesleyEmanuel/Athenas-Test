@@ -108,7 +108,6 @@ export default {
         this.loadingCreatingPerson = false;
         return;
       }
-      console.log(this.form);
       const newPerson = {
         first_name: this.form.first_name,
         last_name: this.form.last_name,
@@ -129,7 +128,6 @@ export default {
             this.alertFeedBack("Error when registering", "danger");
             this.loadingCreatingPerson = false;
           }
-          console.log(resp);
         })
         .catch(() => {
           this.loadingCreatingPerson = false;

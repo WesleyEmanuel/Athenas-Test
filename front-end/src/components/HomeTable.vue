@@ -13,10 +13,10 @@
       <ModalCreatePerson @updatePersonList="updatePersonList" />
       <div>
         <input
-          type="number"
+          type="text"
           class="form-control"
           id="exampleFormControlInput1"
-          placeholder="search by id"
+          placeholder="search by first name"
           v-model="search"
         />
       </div>
@@ -40,7 +40,6 @@
         :show-info="showInfo"
         :show-navigation-buttons="showNavButtons"
       />
-      <DxColumn data-field="id" width="70" />
       <DxColumn data-field="First Name" />
       <DxColumn data-field="Last Name" />
       <DxColumn data-field="Gender" />
@@ -132,7 +131,6 @@ export default {
     return {
       dataSource: [],
       columns: [
-        "Id",
         "First Name",
         "Last Name",
         "Gender",
@@ -160,7 +158,6 @@ export default {
   watch: {
     search(value) {
       this.updatePersonList(value);
-      console.log(this.dataSource);
     },
   },
   mounted() {
@@ -170,8 +167,7 @@ export default {
     async updatePersonList(search) {
       const url = search ? `/persons/${search}` : "/persons";
       await this.$http.get(url).then((resp) => {
-        console.log(resp.data);
-        this.dataSource = Array.isArray(resp.data.persons)
+        this.dataSource = resp.data.persons
           ? resp.data.persons.map((person) => {
               return {
                 id: person.id.toString(),
@@ -182,16 +178,16 @@ export default {
                 "Date of Birth": person.birthday,
               };
             })
-          : [
-              {
-                id: resp.data.id.toString(),
-                "First Name": resp.data.first_name,
-                "Last Name": resp.data.last_name,
-                Gender: resp.data.gender,
-                Adress: resp.data.adress_name,
-                "Date of Birth": resp.data.birthday,
-              },
-            ];
+          : resp.data.map((person) => {
+              return {
+                id: person.id.toString(),
+                "First Name": person.first_name,
+                "Last Name": person.last_name,
+                Gender: person.gender,
+                Adress: person.adress_name,
+                "Date of Birth": person.birthday,
+              };
+            });
       });
     },
     openModal(data) {

@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+const { where, Op } = require("sequelize");
 const Person = require("../models/Person");
 
 module.exports = {
@@ -17,13 +17,17 @@ module.exports = {
   },
 
   async index(req, resp) {
-    const { id } = req.params;
+    const { search } = req.params;
 
-    if (!id) {
+    if (!search) {
       const persons = await Person.findAll();
       return resp.status(200).json({ persons });
     } else {
-      const person = await Person.findByPk(id);
+      const person = await Person.findAll({
+        where: {
+          first_name: { [Op.like]: `%${search}%` },
+        },
+      });
       if (!person) {
         return resp.status(204).json({ error: "Person not found" });
       }

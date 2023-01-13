@@ -122,7 +122,6 @@ export default {
             this.alertFeedBack("Error registering edition", "danger");
             this.loadingUpdatingPerson = false;
           }
-          console.log(resp);
         })
         .catch(() => {
           this.loadingUpdatingPerson = false;

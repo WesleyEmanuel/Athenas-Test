@@ -3,7 +3,7 @@ const PersonController = require("./controllers/PersonController");
 
 const routes = express.Router();
 
-routes.get("/persons/:id*?", PersonController.index);
+routes.get("/persons/:search*?", PersonController.index);
 
 routes.post("/persons", PersonController.store);
 
